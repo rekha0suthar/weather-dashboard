@@ -2,8 +2,6 @@ import { WeatherProvider } from './context/WeatherContext';
 import GlobalStyle from './styles/GlobalStyle';
 import SearchBar from './components/SearchBar';
 import ErrorMessage from './components/ErrorMessage';
-import WeatherInfo from './components/WeatherInfo';
-import Forecast from './components/Forecast';
 import WeatherDashboard from './components/WeatherDashboard';
 
 const App = () => {
