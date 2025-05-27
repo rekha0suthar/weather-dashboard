@@ -8,6 +8,18 @@ SkyCast is a responsive React-based weather application that allows users to sea
 
 ---
 
+### My Approach
+
+To build this weather dashboard, I started with a **Vite + React** setup and structured the project into modular components using functional **React Hooks**. I used **styled-components** for styling and **React Context** to manage the global state like selected city and unit preferences.
+
+To efficiently fetch and cache data, I integrated **React Query v5**, which polls the OpenWeatherMap API every 30 seconds. The forecast is intelligently filtered to show exactly 5 future days, excluding today, based on available hourly data.
+
+Key features like unit toggle (°C/°F), local storage of the last searched city, error handling for invalid inputs, and responsive design were implemented to demonstrate best practices in modern React development.
+
+The UI design was modeled to resemble a clean weather card interface with gradients, iconography, and mobile-friendly responsiveness.
+
+---
+
 ### 🚀 Features
 
 - 🔍 Search weather by city name
