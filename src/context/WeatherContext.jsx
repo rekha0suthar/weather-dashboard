@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 
 const WeatherContext = createContext();
 
-const API_KEY = import.meta.env.VITE_API_KEY;
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 export const WeatherProvider = ({ children }) => {
-  const [city, setCity] = useState(localStorage.getItem('city') || 'London');
+  const [city, setCity] = useState(localStorage.getItem('city') || 'Bangalore');
   const [units, setUnits] = useState('metric'); // 'metric' for °C, 'imperial' for °F
 
   const toggleUnits = () => {
