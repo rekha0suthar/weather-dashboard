@@ -30,35 +30,26 @@ export const WeatherProvider = ({ children }) => {
       const res = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`
       );
+
       const list = res.data.list;
+      const today = new Date().toLocaleDateString();
 
-      const now = new Date();
-      const todayDate = now.toLocaleDateString();
-      const targetHour = Math.round(now.getHours() / 3) * 3;
+      const dailyMap = new Map();
 
-      const daily = [];
-      const seenDays = new Set();
-
-      for (let item of list) {
+      for (const item of list) {
         const date = new Date(item.dt_txt);
         const dateStr = date.toLocaleDateString();
-        const hour = date.getHours();
 
-        if (
-          dateStr !== todayDate &&
-          hour === targetHour &&
-          !seenDays.has(dateStr)
-        ) {
-          daily.push(item);
-          seenDays.add(dateStr);
+        if (dateStr !== today && !dailyMap.has(dateStr)) {
+          dailyMap.set(dateStr, item);
         }
 
-        if (daily.length === 5) break;
+        if (dailyMap.size === 5) break;
       }
 
-      setForecast(daily);
+      setForecast(Array.from(dailyMap.values()));
     } catch (err) {
-      console.error('Error fetching forecast:', err);
+      console.error('Forecast error:', err);
     }
   };
 

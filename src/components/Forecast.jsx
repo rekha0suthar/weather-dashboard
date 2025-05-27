@@ -3,17 +3,18 @@ import { useWeather } from '../context/WeatherContext';
 
 const ForecastRow = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 10px;
-  margin-top: 20px;
+  justify-content: space-between;
 `;
 
 const ForecastItem = styled.div`
+  flex: 1;
+  min-width: 100px;
   background: rgba(255, 255, 255, 0.1);
   padding: 12px;
-  text-align: center;
   border-radius: 10px;
-  flex: 1;
+  text-align: center;
   color: white;
 `;
 

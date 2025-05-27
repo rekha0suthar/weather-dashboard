@@ -9,7 +9,7 @@ const CenterBlock = styled.div`
 `;
 
 const TempBlock = styled.div`
-  font-size: 4rem;
+  font-size: 44px;
   font-weight: bold;
 `;
 
@@ -33,12 +33,12 @@ const WeatherInfo = () => {
   return (
     <CenterBlock>
       <TempBlock>
-        {Math.round(weather.main.temp)}°
+        {Math.round(weather?.main.temp)}°
         <br />
         <small>{date}</small>
       </TempBlock>
       <Icon
-        src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+        src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
         alt="icon"
       />
     </CenterBlock>

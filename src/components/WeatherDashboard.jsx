@@ -4,14 +4,22 @@ import Forecast from './Forecast';
 import WeatherInfo from './WeatherInfo';
 
 const DashboardCard = styled.div`
-  width: 90%;
-  max-width: 720px;
-  margin: 30px auto;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
   padding: 30px;
   border-radius: 20px;
   color: #fff;
-  background: linear-gradient(to bottom, #5e8ecf, #6fc182);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 `;
 
 const TopRow = styled.div`
@@ -42,8 +50,8 @@ const WeatherDashboard = () => {
   return (
     <DashboardCard>
       <TopRow>
-        <div>{formatCity(city)}</div>
-        <div>{time}</div>
+        <h2>{formatCity(city)}</h2>
+        <h2>{time}</h2>
       </TopRow>
 
       <WeatherInfo />

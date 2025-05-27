@@ -3,11 +3,13 @@ import { useWeather } from '../context/WeatherContext';
 import styled from 'styled-components';
 
 const Input = styled.input`
-  padding: 10px;
+  width: 100%;
+  padding: 15px;
+  font-size: 1rem;
+  border-radius: 50px;
   border: none;
-  border-radius: 5px;
-  width: 300px;
-  margin: 10px;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const SearchBar = () => {
