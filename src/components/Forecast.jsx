@@ -18,8 +18,17 @@ const ForecastItem = styled.div`
   color: white;
 `;
 
+const FallbackMessage = styled.p`
+  color: white;
+  text-align: center;
+`;
+
 export default function Forecast() {
-  const { forecast } = useWeather();
+  const { forecast, units, loading } = useWeather();
+
+  if (loading) return <FallbackMessage>Loading forecast...</FallbackMessage>;
+  if (!forecast || forecast.length === 0)
+    return <FallbackMessage>No forecast data available.</FallbackMessage>;
 
   return (
     <ForecastRow>
@@ -40,7 +49,9 @@ export default function Forecast() {
               alt="icon"
               width="50"
             />
-            <p>{Math.round(item.main.temp)}°</p>
+            <p>
+              {Math.round(item.main.temp)}°{units === 'metric' ? 'C' : 'F'}
+            </p>
             <p style={{ fontSize: '0.8rem' }}>{item.weather[0].main}</p>
           </ForecastItem>
         );

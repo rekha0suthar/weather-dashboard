@@ -23,7 +23,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div>
+    <div style={{ flex: '6' }}>
       <Input
         placeholder="Enter city name"
         value={searchTerm}

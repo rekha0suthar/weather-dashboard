@@ -1,75 +1,77 @@
 import axios from 'axios';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 const WeatherContext = createContext();
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 export const WeatherProvider = ({ children }) => {
-  const [weather, setWeather] = useState(null);
-  const [city, setCity] = useState(localStorage.getItem('city') || 'Bangalore');
-  const [error, setError] = useState(null);
-  const [forecast, setForecast] = useState([]);
+  const [city, setCity] = useState(localStorage.getItem('city') || 'London');
+  const [units, setUnits] = useState('metric'); // 'metric' for °C, 'imperial' for °F
+
+  const toggleUnits = () => {
+    setUnits((prev) => (prev === 'metric' ? 'imperial' : 'metric'));
+  };
 
   const fetchWeather = async () => {
-    try {
-      const res = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
-      );
-      setWeather(res.data);
-      setError(null);
-    } catch (err) {
-      setError('Could not fetch Weather. Please check city name.');
-      console.log(err);
-      setWeather(null);
-    }
+    const res = await axios.get(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${units}`
+    );
+    return res.data;
   };
 
   const fetchForecast = async () => {
-    try {
-      const res = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`
-      );
+    const res = await axios.get(
+      `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=${units}`
+    );
+    const list = res.data.list;
+    const today = new Date().toLocaleDateString();
 
-      const list = res.data.list;
-      const today = new Date().toLocaleDateString();
-
-      const dailyMap = new Map();
-
-      for (const item of list) {
-        const date = new Date(item.dt_txt);
-        const dateStr = date.toLocaleDateString();
-
-        if (dateStr !== today && !dailyMap.has(dateStr)) {
-          dailyMap.set(dateStr, item);
-        }
-
-        if (dailyMap.size === 5) break;
+    const dailyMap = new Map();
+    for (const item of list) {
+      const dateStr = new Date(item.dt_txt).toLocaleDateString();
+      if (dateStr !== today && !dailyMap.has(dateStr)) {
+        dailyMap.set(dateStr, item);
       }
-
-      setForecast(Array.from(dailyMap.values()));
-    } catch (err) {
-      console.error('Forecast error:', err);
+      if (dailyMap.size === 5) break;
     }
+
+    return Array.from(dailyMap.values());
   };
 
-  useEffect(() => {
-    localStorage.setItem('city', city);
-  }, [city]);
+  const {
+    data: weather,
+    isLoading: weatherLoading,
+    error: weatherError,
+  } = useQuery({
+    queryKey: ['weather', city, units],
+    queryFn: fetchWeather,
+    refetchInterval: 30000,
+  });
 
-  useEffect(() => {
-    fetchWeather();
-    fetchForecast();
-    const interval = setInterval(() => {
-      fetchWeather();
-      fetchForecast();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, [city]);
+  const {
+    data: forecast,
+    isLoading: forecastLoading,
+    error: forecastError,
+  } = useQuery({
+    queryKey: ['forecast', city, units],
+    queryFn: fetchForecast,
+    refetchInterval: 30000,
+  });
 
   return (
     <WeatherContext.Provider
-      value={{ weather, city, error, setCity, forecast }}
+      value={{
+        city,
+        setCity,
+        weather,
+        forecast,
+        units,
+        toggleUnits,
+        error: weatherError || forecastError,
+        loading: weatherLoading || forecastLoading,
+      }}
     >
       {children}
     </WeatherContext.Provider>

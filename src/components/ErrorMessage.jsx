@@ -1,15 +1,28 @@
 import styled from 'styled-components';
 import { useWeather } from '../context/WeatherContext';
 
-const ErrorBox = styled.div`
-  color: red;
-  margin-top: 10px;
+const ErrorMessage = styled.div`
+  background: rgba(255, 0, 0, 0.2);
+  color: #fff;
+  padding: 10px;
   text-align: center;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
 `;
 
-const ErrorMessage = () => {
+export default function WeatherDashboard() {
   const { error } = useWeather();
-  return error ? <ErrorBox>{error}</ErrorBox> : null;
-};
 
-export default ErrorMessage;
+  if (error) {
+    return (
+      <ErrorMessage>
+        🚫{' '}
+        {error.response?.data?.message ||
+          'Something went wrong. Try another city.'}
+      </ErrorMessage>
+    );
+  }
+}
